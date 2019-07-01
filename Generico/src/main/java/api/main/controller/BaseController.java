@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import api.main.service.IBaseService;
 
-public class BaseController <DTO>{
+public abstract class BaseController <DTO>{
 
 	private IBaseService service;
 	
@@ -108,28 +108,5 @@ public class BaseController <DTO>{
 		}
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

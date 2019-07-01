@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import api.main.DTO.BaseDTO;
 import api.main.entity.Base;
 
-public class BaseService <ENTITY extends Base, DTO extends BaseDTO> implements IBaseService <DTO>{
+public abstract class BaseService <ENTITY extends Base, DTO extends BaseDTO> implements IBaseService <DTO>{
 			
 	private JpaRepository repository;
 	private Class dtoClass;
