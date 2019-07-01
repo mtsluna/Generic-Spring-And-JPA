@@ -67,6 +67,7 @@ public abstract class BaseService <ENTITY extends Base, DTO extends BaseDTO> imp
 		
 	}
 	
+	@Transactional
 	public DTO save (DTO dto) throws Exception {
 		
 		ENTITY entity;

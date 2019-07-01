@@ -58,6 +58,7 @@ public abstract class BaseController <DTO>{
 	
 	@PostMapping("/")
 	@CrossOrigin(origins = "*")
+	@Transactional
 	public ResponseEntity post(@RequestBody DTO dto) {
 		
 		try {
