@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import api.main.service.IBaseService;
 
 public abstract class BaseController <DTO>{
@@ -21,14 +23,31 @@ public abstract class BaseController <DTO>{
 		this.service = service;
 	}
 	
-	@GetMapping("/")
+	@GetMapping("/count")
 	@CrossOrigin(origins = "*")
 	@Transactional
-	public ResponseEntity getAll(){
+	public ResponseEntity getPageCount(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size", defaultValue = "10") int size) {
 		
 		try {
 			
-			return ResponseEntity.status(HttpStatus.FOUND).body(service.findAll());
+			return ResponseEntity.status(HttpStatus.OK).body("{\"pages\": "+service.countPages(page, size)+"}");
+			
+		} catch (Exception e) {
+			
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"message\": \"Error. Please try again later.\"}");
+			
+		}
+		
+	}
+	
+	@GetMapping("/")
+	@CrossOrigin(origins = "*")
+	@Transactional
+	public ResponseEntity getAll(@RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size", defaultValue = "10") int size){
+		
+		try {
+			
+			return ResponseEntity.status(HttpStatus.OK).body(service.findAll(page, size));
 			
 		} catch (Exception e) {
 			
@@ -45,7 +64,7 @@ public abstract class BaseController <DTO>{
 		
 		try {
 			
-			return ResponseEntity.status(HttpStatus.FOUND).body(service.findById(id));
+			return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
 			
 		} catch (Exception e) {
 			
@@ -64,7 +83,7 @@ public abstract class BaseController <DTO>{
 		try {
 			
 			DTO result = (DTO) service.save(dto);
-			return ResponseEntity.status(HttpStatus.FOUND).body(result);
+			return ResponseEntity.status(HttpStatus.OK).body(result);
 			
 		} catch (Exception e) {
 			
@@ -82,7 +101,7 @@ public abstract class BaseController <DTO>{
 		try {
 			
 			DTO result = (DTO) service.update(id, dto);
-			return ResponseEntity.status(HttpStatus.FOUND).body(result);
+			return ResponseEntity.status(HttpStatus.OK).body(result);
 			
 		} catch (Exception e) {
 			

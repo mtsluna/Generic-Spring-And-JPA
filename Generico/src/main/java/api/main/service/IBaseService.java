@@ -5,7 +5,9 @@ import javax.transaction.Transactional;
 
 public interface IBaseService <DTO>{
 
-	public List<DTO> findAll() throws Exception;
+	public int countPages(int page, int size) throws Exception;
+	
+	public List<DTO> findAll(int page, int size) throws Exception;
 	
 	public DTO findById(int id) throws Exception;
 	

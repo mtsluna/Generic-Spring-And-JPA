@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import api.main.DTO.BaseDTO;
 import api.main.entity.Base;
@@ -21,23 +24,39 @@ public abstract class BaseService <ENTITY extends Base, DTO extends BaseDTO> imp
 		this.entityClass = entityClass;
 	}
 	
+	public int countPages(int page, int size) throws Exception {
+		try {
+			
+			Pageable pageable = PageRequest.of(page, size);
+			return repository.findAll(pageable).getTotalPages();
+			
+		} catch (Exception e) {
+
+			throw new Exception();
+			
+		}
+	}
+	
 	@Transactional
-	public List<DTO> findAll() throws Exception {
+	public List<DTO> findAll(int page, int size) throws Exception {
 		
-		List<ENTITY> entities = repository.findAll();
-		List<DTO> dtos = new ArrayList<>();
+		//NUEVA FUNCIONALIDAD		
+		
+		List<DTO> dtos = new ArrayList<DTO>();
 		
 		try {
-		
-			ModelMapper modelMapper = new ModelMapper();
 			
-			for (ENTITY item : entities) {
+			ModelMapper modelMapper = new ModelMapper();			
+			Pageable pageable = PageRequest.of(page, size);
+			Page<ENTITY> entities = repository.findAll(pageable);
+			
+			for (ENTITY item : entities.getContent()) {
 				
 				DTO dto = (DTO) modelMapper.map(item, dtoClass);
 				dtos.add(dto);
 				
-			}
-		
+			}			
+			
 		} catch (Exception e) {
 			
 			throw new Exception();
@@ -45,6 +64,8 @@ public abstract class BaseService <ENTITY extends Base, DTO extends BaseDTO> imp
 		}
 		
 		return dtos;
+		
+		//
 		
 	}
 	
